@@ -1,11 +1,9 @@
 #!/usr/bin/python3
-"""
-Fetches an URL with requests package
-"""
+"""Documented now"""
 import requests
 
-
-if __name__ == "__main__":
-    r = requests.get('https://intranet.hbtn.io/status')
-    t = r.text
-    print('Body response:\n\t- type: {}\n\t- content: {}'.format(type(t), t))
+if __name__ == '__main__':
+    response = requests.get("https://intranet.hbtn.io/status")
+    print("Body response:")
+    print("\t- type: {}".format(type(response.text)))
+    print("\t- content: {}".format(response.text))
