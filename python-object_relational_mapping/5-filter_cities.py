@@ -1,38 +1,40 @@
 #!/usr/bin/python3
-""" lists all cities from the database hbtn_0e_4_usa
+"""
+This script  takes in the name of a state
+as an argument and lists all cities of that
+state, using the database `hbtn_0e_4_usa`.
 """
 
-import MySQLdb
-import sys
-
-
-def my_safe_filter_states():
-    """ lists all cities from the database
-    hbtn_0e_4_usa"""
-
-    db = MySQLdb.connect(host="localhost",
-                         port=3306,
-                         user=sys.argv[1],
-                         passwd=sys.argv[2],
-                         db=sys.argv[3]
-                         )
-    cursor = db.cursor()
-
-    cursor \
-        .execute("SELECT cities.name FROM cities\
-                    JOIN states ON cities.state_id = states.id\
-                    AND states.name = %s\
-                    ORDER BY cities.id ASC", (sys.argv[4],))
-
-    records = cursor.fetchall()
-    cites = []
-    for data in records:
-        cites.append(data[0])
-
-    print(", ".join(cites))
-    cursor.close()
-    db.close()
-
+import MySQLdb as db
+from sys import argv
 
 if __name__ == "__main__":
-    my_safe_filter_states()
+    """
+    Access to the database and get the cities
+    from the database.
+    """
+
+    db_connect = db.connect(host="localhost", port=3306,
+                            user=argv[1], passwd=argv[2], db=argv[3])
+
+    with db_connect.cursor() as db_cursor:
+        db_cursor.execute("""
+            SELECT
+                cities.id, cities.name
+            FROM
+                cities
+            JOIN
+                states
+            ON
+                cities.state_id = states.id
+            WHERE
+                states.name LIKE BINARY %(state_name)s
+            ORDER BY
+                cities.id ASC
+        """, {
+            'state_name': argv[4]
+        })
+        rows_selected = db_cursor.fetchall()
+
+    if rows_selected is not None:
+        print(", ".join([row[1] for row in rows_selected]))
