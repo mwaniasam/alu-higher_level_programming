@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-"""Fetches from multiple URLs and prints their status."""
+"""Fetches responses from specified URLs and prints their status."""
+
 import urllib.request
 
 def fetch_url(url):
+    """Fetch and print the response from the specified URL."""
     try:
         request = urllib.request.Request(url)
         with urllib.request.urlopen(request) as response:
