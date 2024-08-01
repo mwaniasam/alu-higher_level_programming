@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-"""Fetches https://alu-intranet.hbtn.io/status."""
+"""Fetches http://0.0.0.0:5050/status."""
 import urllib.request
 
-
 if __name__ == "__main__":
-    request = urllib.request.Request("https://alu-intranet.hbtn.io/status")
+    request = urllib.request.Request("http://0.0.0.0:5050/status")
     with urllib.request.urlopen(request) as response:
         body = response.read()
         print("Body response:")
