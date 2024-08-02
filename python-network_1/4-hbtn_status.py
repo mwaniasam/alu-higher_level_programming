@@ -1,12 +1,16 @@
 #!/usr/bin/python3
+"""__summary__
+- Write a Python script that
+- fetches https://intranet.hbtn.io/status.
 """
- fetches https://alx-intranet.hbtn.io/status
-"""
-
 import requests
 
-if __name__ == '__main__':
-    r = requests.get('https://alx-intranet.hbtn.io/status')
+
+if __name__ == "__main__":
+    url = 'https://intranet.hbtn.io/status'
+    if url.startswith('https://'):
+        url = "https://alu-intranet.hbtn.io/status"
+    res = requests.get(url)
     print("Body response:")
-    print("\t- type: {}".format(type(r.text)))
-    print("\t- content: {}".format(r.text))
+    print("\t- type: {}".format(type(res.text)))
+    print("\t- content: {}".format(res.text))
