@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/node
 
 const factorial = (n) => {
   if (isNaN(n) || n === 0) {
