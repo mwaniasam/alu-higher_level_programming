@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-function factorial(n) { // Add space before parentheses
+function factorial (n) { // Add space before parentheses
   if (isNaN(n) || n === 0) {
     return 1;
   } else {
