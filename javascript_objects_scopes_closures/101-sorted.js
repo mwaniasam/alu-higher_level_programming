@@ -1,10 +1,17 @@
 #!/usr/bin/node
+
 const dict = require('./101-data').dict;
-const n = {};
-for (const i in dict) {
-  if (n[dict[i]] === undefined) {
-    n[dict[i]] = [];
-  }
-  n[dict[i]].push(i);
+const newDict = {};
+for (const key in dict) {
+    const value = dict[key];
+    console.log(`Processing key: ${key}, value: ${value}`);
+    if (newDict[value] === undefined) {
+        newDict[value] = [];
+        newDict[value].push(key);
+        console.log(`Creating new entry in newDict: ${value} => ${newDict[value]}`);
+    } else {
+        newDict[value].push(key);
+        console.log(`Adding ${key} to existing entry in newDict: ${value} => ${newDict[value]}`);
+    }
 }
-console.log(n);
+console.log(newDict);
