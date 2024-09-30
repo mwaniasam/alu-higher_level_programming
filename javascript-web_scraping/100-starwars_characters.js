@@ -1,44 +1,36 @@
-#!/usr/bin/node
-
+#!/usr/bin/env node
+const movieId = process.argv.slice(2)[0];
 const request = require('request');
 
-const movieId = process.argv[2];
+const filmsUrl = `https://swapi-api.hbtn.io/api/films/${movieId}`;
 
-const options = {
-  url: `https://swapi.dev/api/films/${movieId}`,
-  json: true
-};
-
-request(options, (error, response, body) => {
+request(filmsUrl, (error, response, body) => {
   if (error) {
-    console.error('Error fetching movie data:', error);
-    return;
-  }
+    console.log(error);
+  } else {
+    const parseData = JSON.parse(body);
+    const characters = parseData.characters;
 
-  const characters = body.characters;
-
-  const characterNames = characters.map(characterUrl => {
-    return new Promise((resolve, reject) => {
-      request(characterUrl, (characterError, characterResponse, characterBody) => {
-        if (characterError) {
-          reject(characterError);
-        } else {
-          resolve(characterBody.name);
-        }
+    const characterPromises = characters.map(charUrl => {
+      return new Promise((resolve, reject) => {
+        request(charUrl, (err, response, body) => {
+          if (err) {
+            reject(err); // Reject the promise if there's an error
+          } else {
+            const parseCharData = JSON.parse(body);
+            resolve(parseCharData.name); // Resolve with the character name
+          }
+        });
       });
     });
-  });
 
-  Promise.all(characterNames)
-    .then(names => {
-      if (names.length !== characters.length) {
-        console.log('Missing some characters');
-        console.log(names);
-      } else {
-        console.log('OK');
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching character data:', error);
-    });
+    Promise.all(characterPromises)
+      .then(characterNames => {
+        console.log('OK'); // Print OK only after all names are fetched
+        characterNames.forEach(name => console.log(name));
+      })
+      .catch(error => {
+        console.error('Error fetching character data:', error);
+      });
+  }
 });
